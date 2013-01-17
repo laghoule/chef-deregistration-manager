@@ -20,7 +20,6 @@ parser = optparse.OptionParser(usage="%prog [options] --chef-node=node_name")
 parser.add_option("--method", dest="method", default="deregister", help="The client registration method (not implemented)")
 parser.add_option("--chef-node", dest="chef_node", default=None, help="[REQUIRED] The chef node name")
 parser.add_option("--instance-id", dest="instance_id", default=None, help="AWS Instance ID. If supplied, the EC2 ID attribute must match the supplied ID.")
-parser.add_option("--nagios-node", dest="nagios_node", default=None, help="The name of the nagios client to put in downtime. If this is not specified, it will be set to the value of --chef_node")
 
 parser.add_option("-c", "--config", dest="config", default="/etc/chef-registration/client/client.cfg", help="Configuration file path")
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Log extra debug output")
@@ -49,15 +48,10 @@ else:
 if not options.chef_node:
     print "Chef node name required (specify with --chef-node)"
     sys.exit(1)
-elif not options.nagios_node:
-    # If there is a chef_node name, and no nagios_node name,
-    # use the chef_node name for downtiming nagios.
-    options.nagios_node = options.chef_node
 
 contents = {
             'type': 'registration',
             'method': options.method,
-            'nagios_name': options.nagios_node,
             'chef_name': options.chef_node
             }
 

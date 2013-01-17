@@ -25,7 +25,14 @@ start(){
 stop(){
     if [ "`runlevel | cut -d " " -f 2`" == 0 ]; then
         echo "Stopping $DAEMON..."
-        ${DAEMON_DIR}/${DAEMON} --chef-node `hostname -f` --instance-id `curl "http://169.254.169.254/1.0/meta-data/instance-id"`
+
+        curl -s "http://169.254.169.254/1.0/meta-data/instance-id"
+        if [ $? -eq 0 ]; then
+            ${DAEMON_DIR}/${DAEMON} --chef-node `curl "http://169.254.169.254/1.0/meta-data/instance-id"`
+        else
+            echo "This doesn't seem to be an EC2 instance, exiting..."
+            exit 1
+        fi
     else
         echo "Skipping execution"
     fi;
