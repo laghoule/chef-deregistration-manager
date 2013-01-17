@@ -7,10 +7,9 @@ import time
 
 class ChefRegistrationHandler():
 
-    def __init__(self, chef_api, backup_dir, nagios_api):
+    def __init__(self, chef_api, backup_dir):
         self.api = chef_api
         self.backup_dir = backup_dir
-        self.nagios = nagios_api
 
     def process(self, message):
         if message.format.__class__.__name__ == "AutoscalingMessage":
@@ -51,11 +50,6 @@ class ChefRegistrationHandler():
 
             if backup and self._backup("chef-node-%s" % (chef_name), json.dumps(node.attributes.to_dict())):
                 node.delete()
-                if self.nagios:
-                    try:
-                        self.nagios.schedule_host_downtime(hostname=chef_name)
-                    except Exception as e:
-                        logging.exception("Unable to connect to Nagios (%s)\nException:\n%s" % (self.nagios.uri, str(e)))
 
         except chef.exceptions.ChefServerNotFoundError:
             logging.error("Node removal requested for non-existent chef node '%s'", chef_name)

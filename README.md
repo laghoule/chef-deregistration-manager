@@ -17,7 +17,6 @@ Dependencies:
   python-configobj
   python-boto (2+)
   python-pychef (https://github.com/coderanger/pychef)
-  python-nagcgi (https://github.com/bmhatfield/NagiosCGI)
 
     Polls SQS
         If the queue does not exist:
@@ -27,7 +26,6 @@ Dependencies:
             Grab event.
 
             If the event is a 'delete':
-                Put instance in downtime in Nagios
                 Dump Chef node JSON to disk
                 Remove Chef Node via Chef API
                 Remove Chef Client via Chef API
