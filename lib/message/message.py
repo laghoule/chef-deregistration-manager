@@ -41,7 +41,7 @@ class RegistrationMessage(MessageFormat):
     Class to handle messages of type "registration"
     """
     _type = 'registration'
-    required_params = ["method", "nagios_name", "chef_name"]
+    required_params = ["method", "chef_name"]
 
     def get_message(self):
         if self.json:
