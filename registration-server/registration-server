@@ -24,7 +24,6 @@ else:
 import clientqueue.poller
 import clientqueue.queue
 import message
-import nagcgi
 import chef
 
 # Read Command Line Options
