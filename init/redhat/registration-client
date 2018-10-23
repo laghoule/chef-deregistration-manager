@@ -23,19 +23,15 @@ start(){
 }
 
 stop(){
-    if [ "`runlevel | cut -d " " -f 2`" == 0 ]; then
-        echo "Stopping $DAEMON..."
+    echo "Stopping $DAEMON..."
 
-        curl -s "http://169.254.169.254/1.0/meta-data/instance-id"
-        if [ $? -eq 0 ]; then
-            ${DAEMON_DIR}/${DAEMON} --chef-node `curl "http://169.254.169.254/1.0/meta-data/instance-id"`
-        else
-            echo "This doesn't seem to be an EC2 instance, exiting..."
-            exit 1
-        fi
+    curl -s "http://169.254.169.254/1.0/meta-data/instance-id"
+    if [ $? -eq 0 ]; then
+        ${DAEMON_DIR}/${DAEMON} --chef-node `curl "http://169.254.169.254/1.0/meta-data/instance-id"`
     else
-        echo "Skipping execution"
-    fi;
+        echo "This doesn't seem to be an EC2 instance, exiting..."
+        exit 1
+    fi
     
     if [ $? -eq 0 ]; then
         echo_success
